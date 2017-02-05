@@ -17,32 +17,28 @@
 Read image files as written by PCO CamWare
 
 Hendrik Soehnholz
-3.4.14
+Initial version: 2014-04-03
 """
 
 import struct
 import numpy as np
-#import matplotlib.pyplot as plt
 
-pco_string = 0x2d4f4350  # String 'PCO-'
+PCO_STRING = 0x2d4f4350  # String 'PCO-'
 
 
 def info(filename):
     """Read information from PCO file header."""
 
     # read image file
-    imgfile = open(filename, 'rb') # read binary
+    imgfile = open(filename, 'rb')  # read binary
     buf = imgfile.read()
     imgfile.close()
 
     # read header
     # 32 bit values (long)
-#    header = range(6)
-#    for i in range(6):
-#        header[i] = struct.unpack_from('<L', buf[4 * i:4 * i + 4])[0]
     header = struct.unpack_from('<' + 'L' * 6, buf)
 
-    if header[0] != pco_string:
+    if header[0] != PCO_STRING:
         print("Error: Not a PCO file!")
         return
 
@@ -58,11 +54,9 @@ def info(filename):
     if np.int32(header[5]) == -1:
         # extended header
         print("Extended header:")
+
         # read extended header
         # 32 bit values (long)
-#        header = range(32)
-#        for i in range(32):
-#            header[i] = struct.unpack_from('<L', buf[4 * i:4 * i + 4])[0]
         header = struct.unpack_from('<' + 'L' * 32, buf)
 
         color_mode = header[6]
@@ -74,7 +68,6 @@ def info(filename):
     return
 
 
-#@profile
 def load(filename):
     """Load image file in .b16 format
     as used by PCO CamWare
@@ -82,20 +75,15 @@ def load(filename):
     """
 
     # read image file
-    imgfile = open(filename, 'rb') # read binary
+    imgfile = open(filename, 'rb')  # read binary
     buf = imgfile.read()
     imgfile.close()
 
-
-
     # read header
     # 32 bit values (long)
-#    header = range(6)
-#    for i in range(6):
-#        header[i] = struct.unpack_from('<L', buf[4 * i:4 * i + 4])[0]
     header = struct.unpack_from('<' + 'L' * 6, buf)
 
-    if header[0] != pco_string:
+    if header[0] != PCO_STRING:
         print("Error: Not a PCO file!")
         return
 
@@ -109,22 +97,11 @@ def load(filename):
         print("Error: Not enough pixel data!")
         return
     else:
-#        img = np.arange(imgsize_x * imgsize_y)
-#        for i in range(imgsize_x * imgsize_y):
-#            img[i] = struct.unpack_from('<H', buf,
-#                                        offset = headersize + 2 * i)[0]
-
-#        daten = struct.unpack_from('<' + 'H' * imgsize_x * imgsize_y,
-#                                   buf, offset = headersize)
-#        img = np.array(daten)
-
-        img = np.frombuffer(buf, \
-                                dtype=np.dtype('<u2'), \
-                                count=imgsize_x * imgsize_y, \
-                                offset=headersize)
+        img = np.frombuffer(buf,
+                            dtype=np.dtype('<u2'),
+                            count=imgsize_x * imgsize_y,
+                            offset=headersize,
+                           )
         img = img.reshape(imgsize_y, imgsize_x)
+
         return img
-
-
-if __name__ == '__main__':
-    print("PCO tools")
