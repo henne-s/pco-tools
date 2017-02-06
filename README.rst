@@ -1,16 +1,19 @@
 
-# PCO Tools
+PCO Tools
+=========
 
 A Python module to read images that have been recorded using a PCO camera and
 the software PCO CamWare.
 
-## Tested cameras
+Tested cameras
+--------------
 
 * SensiCam qe
 
 The module should also work for other PCO cameras.
 
-## Examples
+Examples
+--------
 
 Load an image and show it using matplotlib:
 
