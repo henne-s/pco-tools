@@ -22,3 +22,14 @@ Load an image and show it using matplotlib::
     
     img = pco.load('myimage.b16')
     plt.imshow(img)
+
+Installation
+------------
+
+Install system-wide::
+
+    pip install pco-tools
+
+Install for a single user::
+
+    pip install --user pco-tools
